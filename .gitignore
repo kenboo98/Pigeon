@@ -3,3 +3,7 @@
 
 # pycache
 __pycache__/
+
+# kenta's test files
+passwords
+test
