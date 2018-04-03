@@ -4,7 +4,7 @@ def initialize():
     global pw_file
     global pw_dict
     pw_dict = {}
-    pw_file = open("passwords", "r+")
+    pw_file = open("passwords", "w+")
     line = pw_file.readline().strip()
     while(line):
         pw_dict[line] = pw_file.readline().strip()
