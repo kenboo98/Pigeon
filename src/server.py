@@ -1,20 +1,21 @@
 from flask import Flask, send_from_directory, request, url_for
 from database import Database
-import password_manager
+import passwords
+
 app = Flask(__name__)
 
 @app.before_first_request
 def startup():
     password_manager.initialize()
-    
+
 @app.route("/")
-def hello():
-    return app.send_static_file('home.html')
+def home():
+    return app.send_static_file('../static/home.html')
 
 @app.route("/login", methods = ['GET','POST'])
 def login():
     if request.method == 'GET':
-        return app.send_static_file("login.html")
+        return app.send_static_file("../static/login.html")
     if request.method == 'POST':
         result = password_manager.verify_login(request.form['username'],request.form['password'])
         if(result == "keyerror"):
@@ -27,10 +28,10 @@ def login():
     else:
         return "error"
 
-@app.route("/create_acc",methods = ['GET','POST'])
-def create_account():
+@app.route("/new",methods = ['GET','POST'])
+def new_account():
     if request.method == 'GET':
-            return app.send_static_file("create_account.html")
+            return app.send_static_file("../static/new_account.html")
     if request.method == 'POST':
         if not request.form['password'] == request.form['confirm_password']:
             return "Password Not Matching"
