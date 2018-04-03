@@ -7,3 +7,6 @@ __pycache__/
 # kenta's test files
 passwords
 test
+
+# MacOS stuff
+.DS_Store
