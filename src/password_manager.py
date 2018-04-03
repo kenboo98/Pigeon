@@ -24,5 +24,4 @@ def verify_login(username, password):
         hasher.update(password.encode())
         return str(hasher.hexdigest()) == pw_dict[username]
     except KeyError:
-        return "keyerror"
-            
+        return "KeyError"
