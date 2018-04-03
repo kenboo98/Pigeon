@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta name="description" content="Pigeon chat Login page"/>
+    <meta name="description" content="Pigeon chat Sign Up page"/>
 	<meta charset="utf-8">
 
 	<title>Pigeon</title>
@@ -49,12 +49,16 @@
     <form method="POST">
         <div class="form-group">
             <label>Username:</label>
-            <input type="email" class="form-control bigger" name=username placeholder="Enter your username">
-            <small class="form-text text-muted">Please enter your email address associated with Pigeon Chat</small>
+            <input type="email" class="form-control bigger" name=username placeholder="Enter new username">
+            <small class="form-text text-muted">Please enter a new email address</small>
         </div>
         <div class="form-group">
             <label>Password:</label>
             <input type="password" class="form-control bigger" name=password placeholder="Password">
+        </div>
+        <div class="form-group">
+            <label>Confirm Password:</label>
+            <input type="password" class="form-control bigger" name=confirm_password placeholder="Password">
         </div>
         <button type="submit" class="btn btn-primary bigger">Submit</button>
     </form>
