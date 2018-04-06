@@ -8,7 +8,7 @@ class UserDB:
         Connects to and works with PIGEON MongoDB database to add users and
         login old users
 
-        Error Codes:
+        Status Codes:
             101: Success; New User added successfully
             102: Success; User logged in successfully
             421: U_IDError; User already in database
