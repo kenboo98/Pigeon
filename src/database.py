@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 import datetime
+import sha256
 import hashlib
 
 class UserDB:
@@ -25,14 +26,14 @@ class UserDB:
         users = self.db.users
 
         # hash user provided password using sha256
-        password = hashlib.sha256(password.encode()).hexdigest()
+        password = sha256.SHA256(password).hexdigest()
 
         # if user email is already in database
         if (not users.find_one({"u_id": u_id}) is None):
             return 421
 
         new_user = {"u_id": u_id,
-                    "password": str(password).upper()}
+                    "password": password}
 
         # insert new user to database
         new_user_insert = users.insert_one(new_user)
@@ -42,7 +43,7 @@ class UserDB:
         users = self.db.users
 
         # hash user provided password using sha256
-        password = hashlib.sha256(password.encode()).hexdigest()
+        login_hash = sha256.SHA256(password).hexdigest()
 
         user = users.find_one({"u_id": u_id})
 
@@ -51,10 +52,7 @@ class UserDB:
             return 431
         else:
             # compare user hashed password to hash stored in database
-            db_password_hash = user.get('password')
-            login_password_hash = str(password).upper()
-
-            if (db_password_hash == login_password_hash):
+            if (user.get('password') == login_hash):
                 return 102
             else:
                 return 431
