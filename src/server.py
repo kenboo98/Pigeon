@@ -82,9 +82,8 @@ def left(message):
     data = {}
     data['message'] = session.get('username') + ' has left Pigeon chat.'
     data['timestamp'] = datetime.datetime.now().strftime("%y-%m-%d %H:%M")
-    emit('status', {'data': data}, broadcast = True)
     session.pop('username', None)
-    return redirect(url_for('home'))
+    emit('status', {'data': data}, broadcast = True)
 
 if __name__ == "__main__":
     socketio.run(app)
