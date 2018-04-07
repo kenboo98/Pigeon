@@ -15,14 +15,15 @@ socket.on("status", function(message) {
 });
 
 function loadMessage(message) {
-    console.log(message);
     $(".chat").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
-        + message.message + '<br/><small class="text-muted">' + message.author + ' | ' + message.createDate + '</small><hr/></div></div></div></li>');
+        + message.data.message + '<br/><small class="text-muted">' + message.data.author + ' | '
+        + message.data.timestamp + '</small><hr/></div></div></div></li>');
 }
 
-function loadStatus(messgae) {
+function loadStatus(message) {
     $(".chat").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
-        + '<br/><small class="text-muted">' + message.message + '|' + message.createDate + '</small><hr/></div></div></div></li>');
+        + '<br/><small class="text-muted">' + message.data.message + ' | ' + message.data.timestamp +
+        '</small><hr/></div></div></div></li>');
 }
 
 $(function(){
@@ -53,6 +54,7 @@ $(function(){
     function signOut() {
         socket.emit("left", {}, function(){
             socket.disconnect();
+            window.location = "/";
         })
     }
 })

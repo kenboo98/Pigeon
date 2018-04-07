@@ -2,6 +2,7 @@ from flask import session, Flask, send_from_directory, request, url_for, redirec
 from flask import render_template
 from flask_socketio import SocketIO, emit, send
 from database import UserDB
+import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'PIGEON'
@@ -17,7 +18,6 @@ def init():
 def home():
     # route to home
     if 'username' in session:
-        print(session['username'])
         return redirect(url_for('chat'))
     return render_template('index.html')
 
@@ -67,16 +67,23 @@ def chat():
 def message_recv(message):
     data = message['data']
     data['author'] = session.get('username')
+    data['timestamp'] = datetime.datetime.now().strftime("%y-%m-%d %H:%M")
     emit('message', {'data': data}, broadcast = True)
 
 @socketio.on('joined', namespace='/chat')
 def joined(message):
-    emit('status', {'message': session.get('username') + ' has entered Pigeon chat.'})
+    data = {}
+    data['message'] = session.get('username') + ' has entered Pigeon chat.'
+    data['timestamp'] = datetime.datetime.now().strftime("%y-%m-%d %H:%M")
+    emit('status', {'data': data}, broadcast = True)
 
 @socketio.on('left', namespace='/chat')
 def left(message):
+    data = {}
+    data['message'] = session.get('username') + ' has left Pigeon chat.'
+    data['timestamp'] = datetime.datetime.now().strftime("%y-%m-%d %H:%M")
+    emit('status', {'data': data}, broadcast = True)
     session.pop('username', None)
-    emit('status', {'messsage': session.get('username') + ' has left Pigeon Chat'})
     return redirect(url_for('home'))
 
 if __name__ == "__main__":
