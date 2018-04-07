@@ -1,7 +1,10 @@
-from flask import Flask, send_from_directory, request, url_for, redirect
+from flask import session, Flask, send_from_directory, request, url_for, redirect
+from flask_socketio import SocketIO
 from database import UserDB
 
 app = Flask(__name__, static_folder='../static')
+app.config['SECRET_KEY'] = 'PIGEON'
+socketio = SocketIO(app)
 
 @app.before_first_request
 def init():
@@ -12,6 +15,8 @@ def init():
 @app.route("/")
 def home():
     # route to home
+    if 'name' in session:
+        return redirect(url_for('chat'))
     return app.send_static_file('index.html')
 
 @app.route("/login", methods = ['GET','POST'])
@@ -23,7 +28,8 @@ def login():
         result = User.verify_login(request.form['username'], request.form['password'])
         if (result == 102):
             # login user and display chat
-            return "Welcome " + request.form['username']
+            session['name'] = request.form['username']
+            return redirect(url_for('chat'))
         elif (result == 431):
             # If user enters wrong username or password
             return "Error: Wrong Username or Password, please try again"
@@ -50,5 +56,26 @@ def new_account():
     else:
         return "Error"
 
+@app.route("/chat")
+def chat():
+    name = session.get('name', '')
+    return app.send_static_file("chat.html")
+
+@socketio.on('message', namespace='/chat')
+def message_recv(message):
+    data = messgage['data']
+    data.author = session.get('name')
+    emit('message', {'data': data}, broadcast = True)
+
+@socketio.on('joined', namespace='/chat')
+def joined(message):
+    emit('status', {'message': session.get('name') + ' has entered Pigeon chat.'})
+
+@socketio.on('left', namespace='/chat')
+def left(message):
+    session.pop('name', None)
+    emit('status', {'messsage': session.get('name') + ' has left Pigeon Chat'})
+    return redirect(url_for('home'))
+
 if __name__ == "__main__":
-    app.run()
+    socketio.run(app)

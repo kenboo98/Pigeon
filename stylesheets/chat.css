@@ -1,0 +1,14 @@
+.fixed {
+    min-height: 500px;
+    max-height: 500px;
+}
+
+.chat {
+    overflow: auto;
+}
+
+.right {
+    float: right;
+    margin-right: 50px;
+    margin-top: 10px;
+}
