@@ -1,9 +1,17 @@
 from pymongo import MongoClient
-import datetime
 import sha256
-import hashlib
 
-class UserDB:
+class DB:
+    """
+        Database setup for MongoDB to be extended by both users
+        and posts document class
+    """
+    def __init__(self):
+        # initalizes a connection to database
+        self.client = MongoClient('localhost', 27017)
+        self.db = self.client.PIGEON
+
+class UserDB(DB):
 
     """
         Connects to and works with PIGEON MongoDB database to add users and
@@ -17,9 +25,7 @@ class UserDB:
     """
 
     def __init__(self):
-        # initalizes a connection to database
-        self.client = MongoClient('localhost', 27017)
-        self.db = self.client.PIGEON
+        super().__init__()
 
     def create_account(self, u_id, password):
         # get users documnet
@@ -56,3 +62,25 @@ class UserDB:
                 return 102
             else:
                 return 431
+
+class PostsDB(DB):
+    """
+        Connects to and works with PIGEON MongoDB database to add posts and
+        search for posts
+
+        Status Codes:
+    """
+    def __init__(self):
+        super().__init__()
+
+    def addPost(self, u_id, post, tstamp):
+        # get posts document from database
+        posts = self.db.posts
+
+        # add new post
+        new_post = {"_id": posts.count() + 1,
+                    "u_id": u_id,
+                    "post": post,
+                    "timestamp": tstamp}
+
+        posts.insert_one(new_post)

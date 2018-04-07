@@ -1,7 +1,7 @@
 from flask import session, Flask, send_from_directory, request, url_for, redirect
 from flask import render_template, make_response
 from flask_socketio import SocketIO, emit, send
-from database import UserDB
+from database import UserDB, PostsDB
 import datetime
 
 app = Flask(__name__)
@@ -11,8 +11,10 @@ socketio = SocketIO(app)
 @app.before_first_request
 def init():
     # initialize user database for login and signup
-    global User
-    User = UserDB()
+    global Users
+    global Posts
+    Users = UserDB()
+    Posts = PostsDB()
 
 @app.route("/")
 def home():
@@ -27,7 +29,7 @@ def login():
         return render_template("login.html")
     if request.method == 'POST':
         # verifies user info and logs them into our server
-        result = User.verify_login(request.form['username'], request.form['password'])
+        result = Users.verify_login(request.form['username'], request.form['password'])
         if (result == 102):
             # login user and display chat
             session['username'] = request.form['username']
@@ -47,7 +49,7 @@ def new_account():
         if not request.form['password'] == request.form['confirm_password']:
             return "Error: Passwords did not match, please try again"
         else:
-            result = User.create_account(request.form['username'], request.form['password'])
+            result = Users.create_account(request.form['username'], request.form['password'])
             if result == 101:
                 # this is where we would log the user
                 return redirect(url_for('login'))
@@ -73,6 +75,7 @@ def message_recv(message):
     data = message['data']
     data['author'] = session.get('username')
     data['timestamp'] = datetime.datetime.now().strftime("%y-%m-%d %H:%M")
+    new_post(session.get('username'), data['message'], data['timestamp'])
     emit('message', {'data': data}, broadcast = True)
 
 @socketio.on('joined', namespace='/chat')
@@ -80,7 +83,6 @@ def joined(message):
     data = {}
     data['message'] = session.get('username') + ' has entered Pigeon chat.'
     data['timestamp'] = datetime.datetime.now().strftime("%y-%m-%d %H:%M")
-    data['logout'] = 0
     emit('status', {'data': data}, broadcast = True)
 
 @socketio.on('left', namespace='/chat')
@@ -88,8 +90,11 @@ def left(message):
     data = {}
     data['message'] = session.get('username') + ' has left Pigeon chat.'
     data['timestamp'] = datetime.datetime.now().strftime("%y-%m-%d %H:%M")
-    data['logout'] = 1
     emit('status', {'data': data}, broadcast = True)
+
+# socketio annotation doesn't see global posts var
+def new_post(u_id, msg, tstamp):
+    Posts.addPost(u_id, msg, tstamp)
 
 if __name__ == "__main__":
     socketio.run(app)
