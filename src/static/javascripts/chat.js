@@ -53,8 +53,8 @@ $(function(){
 
     function signOut() {
         socket.emit("left", {}, function(){
+            window.location = "/logout";
             socket.disconnect();
-            window.location = "/";
         })
     }
 })

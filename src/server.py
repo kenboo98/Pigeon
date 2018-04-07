@@ -1,5 +1,5 @@
 from flask import session, Flask, send_from_directory, request, url_for, redirect
-from flask import render_template
+from flask import render_template, make_response
 from flask_socketio import SocketIO, emit, send
 from database import UserDB
 import datetime
@@ -63,6 +63,11 @@ def chat():
     username = session.get('username', '')
     return render_template("chat.html")
 
+@app.route("/logout")
+def logout():
+    session.pop('username')
+    return redirect(url_for('home'))
+
 @socketio.on('message', namespace='/chat')
 def message_recv(message):
     data = message['data']
@@ -75,6 +80,7 @@ def joined(message):
     data = {}
     data['message'] = session.get('username') + ' has entered Pigeon chat.'
     data['timestamp'] = datetime.datetime.now().strftime("%y-%m-%d %H:%M")
+    data['logout'] = 0
     emit('status', {'data': data}, broadcast = True)
 
 @socketio.on('left', namespace='/chat')
@@ -82,7 +88,7 @@ def left(message):
     data = {}
     data['message'] = session.get('username') + ' has left Pigeon chat.'
     data['timestamp'] = datetime.datetime.now().strftime("%y-%m-%d %H:%M")
-    session.pop('username', None)
+    data['logout'] = 1
     emit('status', {'data': data}, broadcast = True)
 
 if __name__ == "__main__":
