@@ -67,8 +67,6 @@ class PostsDB(DB):
     """
         Connects to and works with PIGEON MongoDB database to add posts and
         search for posts
-
-        Status Codes:
     """
     def __init__(self):
         super().__init__()
@@ -84,3 +82,29 @@ class PostsDB(DB):
                     "timestamp": tstamp}
 
         posts.insert_one(new_post)
+
+    def loadLast(self, count, lastLoaded):
+        """
+            loads last (count) number of messages before the last loaded message
+        """
+        posts = self.db.posts
+        loaded = []
+        last_posts = []
+
+        load_num = count if lastLoaded - count >= 1 else lastLoaded - 1
+        loaded = posts.find({"_id": {"$gte": lastLoaded - load_num, "$lte": lastLoaded - 1}}).sort("_id")
+
+        for post in loaded:
+            last_posts.append({"author": post.get("u_id"),
+                                "message": post.get("post"),
+                                "timestamp": post.get("timestamp")})
+
+        returnLoaded = lastLoaded - load_num
+
+        return last_posts, returnLoaded
+
+    def getCount(self):
+        """
+            returns total number of posts
+        """
+        return self.db.posts.count()

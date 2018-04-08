@@ -4,6 +4,7 @@ var socket = io.connect('http://' + document.domain + ':' + location.port + chan
 
 socket.on("connect", function() {
     socket.emit('joined', {});
+    socket.emit('loadUp', {});
 });
 
 socket.on("message", function (message) {
@@ -12,6 +13,10 @@ socket.on("message", function (message) {
 
 socket.on("status", function(message) {
     loadStatus(message);
+});
+
+socket.on("previous", function(messages) {
+    addMesssages(messages);
 });
 
 function loadMessage(message) {
@@ -24,6 +29,19 @@ function loadStatus(message) {
     $(".chat").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
         + '<br/><small class="text-muted">' + message.data.message + ' | ' + message.data.timestamp +
         '</small><hr/></div></div></div></li>');
+}
+
+function addMesssages(messages) {
+    messages = messages.data
+
+    for (let i = messages.count - 1; i>=0; i--) {
+
+        let message = messages.messages[i]
+
+        $(".chat").prepend('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
+            + message.message + '<br/><small class="text-muted">' + message.author + ' | '
+            + message.timestamp + '</small><hr/></div></div></div></li>');
+    }
 }
 
 $(function(){
@@ -42,6 +60,10 @@ $(function(){
         signOut();
     });
 
+    $('#loadUp').on("click", function() {
+        loadUp()
+    })
+
     function send() {
         $container = $(".chat");
         $container[0].scrollTop = $container[0].scrollHeight;
@@ -55,6 +77,10 @@ $(function(){
         socket.emit("left", {}, function(){
             window.location = "/logout";
             socket.disconnect();
-        })
+        });
+    }
+
+    function loadUp() {
+        socket.emit("loadUp", {});
     }
 })

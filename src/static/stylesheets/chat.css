@@ -13,3 +13,11 @@
     margin-right: 50px;
     margin-top: 10px;
 }
+
+.panel-heading {
+    margin-bottom: 10px;
+}
+
+#loadUp {
+    float: right;
+}
