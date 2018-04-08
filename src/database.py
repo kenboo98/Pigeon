@@ -28,6 +28,14 @@ class UserDB(DB):
         super().__init__()
 
     def create_account(self, u_id, password):
+        """
+            adds new account to database, password is stored as a sha256 hash
+            Args:
+                u_id - user email to be added
+                password - password to be added (unhashed)
+            Returns:
+                status code - to signal error or success back to server
+        """
         # get users documnet
         users = self.db.users
 
@@ -46,6 +54,14 @@ class UserDB(DB):
         return 101
 
     def verify_login(self, u_id, password):
+        """
+            verifies user id and password for login
+            Args:
+                u_id - user email to be added
+                password - password to be added (unhashed)
+            Returns:
+                status code - to signal error or success back to server
+        """
         users = self.db.users
 
         # hash user provided password using sha256
@@ -72,6 +88,13 @@ class PostsDB(DB):
         super().__init__()
 
     def addPost(self, u_id, post, tstamp):
+        """
+            adds new post to database
+            Args:
+                u_id - user email which posted new post
+                post - the post (message) to be added
+                tstamp - time when the post was made
+        """
         # get posts document from database
         posts = self.db.posts
 
@@ -86,22 +109,32 @@ class PostsDB(DB):
     def loadLast(self, count, lastLoaded):
         """
             loads last (count) number of messages before the last loaded message
+            Args:
+                count - number of posts the server wants to load
+                lastLoaded - index of last loaded post at top
+            Returns:
+                last_posts - array of the previous posts loaded
+                returnLoadedIndex - New last loaded index
         """
         posts = self.db.posts
         loaded = []
         last_posts = []
 
+        # get last (count) number of posts from db if they exist, else limit the number
+        # of posts to be loaded
         load_num = count if lastLoaded - count >= 1 else lastLoaded - 1
         loaded = posts.find({"_id": {"$gte": lastLoaded - load_num, "$lte": lastLoaded - 1}}).sort("_id")
 
+        # clean up posts to be added to a format client expects
         for post in loaded:
             last_posts.append({"author": post.get("u_id"),
                                 "message": post.get("post"),
                                 "timestamp": post.get("timestamp")})
 
-        returnLoaded = lastLoaded - load_num
+        # new last loaded index
+        returnLoadedIndex = lastLoaded - load_num
 
-        return last_posts, returnLoaded
+        return last_posts, returnLoadedIndex
 
     def getCount(self):
         """

@@ -23,12 +23,20 @@ function loadMessage(message) {
     $(".chat").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
         + message.data.message + '<br/><small class="text-muted">' + message.data.author + ' | '
         + message.data.timestamp + '</small><hr/></div></div></div></li>');
+
+    $('.fixed').animate({
+        scrollTop: $('.chat li:last-child').offset().top + 'px'
+    }, 1000);
 }
 
 function loadStatus(message) {
     $(".chat").append('<li class="media"><div class="media-body"><div class="media"><div class="media-body">'
         + '<br/><small class="text-muted">' + message.data.message + ' | ' + message.data.timestamp +
         '</small><hr/></div></div></div></li>');
+
+    $('.fixed').animate({
+        scrollTop: $('.chat li:last-child').offset().top + 'px'
+    }, 1000);
 }
 
 function addMesssages(messages) {
@@ -42,6 +50,10 @@ function addMesssages(messages) {
             + message.message + '<br/><small class="text-muted">' + message.author + ' | '
             + message.timestamp + '</small><hr/></div></div></div></li>');
     }
+
+    $('.fixed').animate({
+        scrollTop: $('.chat li:first-child').offset().top + 'px'
+    }, 1000);
 }
 
 $(function(){

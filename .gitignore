@@ -10,3 +10,8 @@ test
 
 # MacOS stuff
 .DS_Store
+
+# Virtualenv files
+include/
+lib/
+bin/
