@@ -17,3 +17,6 @@ lib/
 bin/
 .Python
 pip-selfcheck.json
+
+# CMPUT-275 submission
+submission/

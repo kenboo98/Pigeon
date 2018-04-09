@@ -21,7 +21,7 @@ These can be installed using pip or simply with our [requirements](https://githu
 ```sh
 $ pip install -r requirements.txt # python2
     # or
-$ pip3 intall -r requirements.txt # python3  
+$ pip3 install -r requirements.txt # python3  
 ```
 
 Documentation for the modules can be found here:
