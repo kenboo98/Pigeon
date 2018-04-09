@@ -1,4 +1,4 @@
-<img src="https://github.com/dandua98/Pigeon/blob/master/common/images/logo.png" width="400" align="middle"></br>
+<p align="center"><img src="https://github.com/dandua98/Pigeon/blob/master/common/images/logo.png" width="400"></br></p>
 
 # Pigeon
 A chat web app made with Flask, SocketsIO and MongoDB for CMPUT 275 final project, with @kenboo98</br>
@@ -6,7 +6,7 @@ Involves our own implementation of SHA256
 
 ## Idea and Execution
 The basic idea behind the application was to make a chat application using Web Sockets and we had to use python somewhere in the project since course restrictions so we use Flask for our backend. We decided to implement SHA256 hashing ourselves too since it didn't really look that bad (kudos to NIST for the amazing standards [publication](https://csrc.nist.gov/csrc/media/publications/fips/180/4/final/documents/fips180-4-draft-aug2014.pdf)). We used MongoDB for our database to store user data and posts. I would prefer using MySQL if we add rooms and other features (relational database would be amazing for that) later on but since we were short on time, we sticked with something fast and easy.</br>
-<img src="https://github.com/dandua98/Pigeon/blob/master/common/images/chat.png" width="500" align="middle"></br>
+<p align="center"><img src="https://github.com/dandua98/Pigeon/blob/master/common/images/chat.png" width="750"></p></br>
 
 ## Getting Started
 This would help you setup our environment on your own system for development and testing. Feel free to fork and make a pull request if you want to contribute to our project.
@@ -70,6 +70,14 @@ $ mongod
 Now, in a web browser, launch localhost on port 5000, or click on http://127.0.0.0:5000
 
 ## Usage
+<p align="center"><img src="https://github.com/dandua98/Pigeon/blob/master/common/images/main.png" width="600" height= "400"></p><br/>
+* Main Screen - Index screen for Pigeon chat service, click login for returning user, sign up for new user<br/>
+
+<p align = "center"><img src="https://github.com/dandua98/Pigeon/blob/master/common/images/login.png"  height=225px style="margin-right: 10px; width: 50%"> <img src="https://github.com/dandua98/Pigeon/blob/master/common/images/signup.png" height = 225px style="margin-left: 10px; width: 50%"></p> <br/>
+* Login screen - To login for a current user and sign up for a new user, additional data like weight and height can later be used for health data<br/>
+
+<p align="center"><img src="https://github.com/dandua98/Pigeon/blob/master/common/images/chat.png" width="500"></p><br/>
+* Chat screen - Enter new messages and load previous messages using the button on top right of chat panel<br/>
 
 ## Authors
 * __Danish Dua__ - _Software engineering student at University of Alberta_ - [GitHub](https://github.com/dandua98)
