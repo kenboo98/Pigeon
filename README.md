@@ -70,7 +70,7 @@ $ mongod
 Now, in a web browser, launch localhost on port 5000, or click on http://127.0.0.0:5000
 
 ## Usage
-<p align="center"><img src="https://github.com/dandua98/Pigeon/blob/master/common/images/main.png" width="600" height= "400"></p><br/>
+<p align="center"><img src="https://github.com/dandua98/Pigeon/blob/master/common/images/main.png" width="400"></p><br/>
 * Main Screen - Index screen for Pigeon chat service, click login for returning user, sign up for new user<br/>
 
 <p align = "center"><img src="https://github.com/dandua98/Pigeon/blob/master/common/images/login.png"  height=225px style="margin-right: 10px; width: 50%"> <img src="https://github.com/dandua98/Pigeon/blob/master/common/images/signup.png" height = 225px style="margin-left: 10px; width: 50%"></p> <br/>
